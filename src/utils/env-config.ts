@@ -11,5 +11,5 @@ public readonly MONGO_URI: string = process.env.MONGO_URI
 }
 
 export const registerEnvConfigurationDI = () => {
-    container.register(EnvConfiguration, { useClass: EnvConfiguration})
+    container.register(EnvConfiguration.name, { useClass: EnvConfiguration})
 }

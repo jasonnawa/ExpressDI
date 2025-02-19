@@ -1,4 +1,4 @@
-import { inject, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { UserController } from "../controllers/userController";
 import { Router } from "express";
 
@@ -10,6 +10,7 @@ export class UserRoutes {
     constructor(
         @inject(UserController.name) userController: UserController
     ){
+        this.router = Router()
         this._userController = userController
 
         this.registerRoutes()
@@ -23,4 +24,8 @@ export class UserRoutes {
             this._userController.getAllUsers(req, res)
         })
     } 
+}
+
+export const registerUserRoutesDI = () => {
+    container.register(UserRoutes.name, {useClass: UserRoutes})
 }

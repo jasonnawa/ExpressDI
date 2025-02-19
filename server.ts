@@ -1,14 +1,19 @@
 import "reflect-metadata";
 import express from "express";
+import cors from "cors";
+import cookieParser from "cookie-parser";
 import { injectable, inject } from "tsyringe";
 import {
   EnvConfiguration,
   disconnectFromDatabase,
   connectToDatabase,
-} from "./utils";
+} from "./src/utils";
 import dotenv from "dotenv";
-import { UserRoutes } from "./routes/userRoutes";
-import BaseRoutes from "./routes/baseRoutes";
+import { UserRoutes } from "./src/routes/userRoutes";
+import BaseRoutes from "./src/routes/baseRoutes";
+import corsOptions from "./src/config/corsOptions.config";
+import helmet from "helmet";
+import morgan from "morgan";
 
 @injectable()
 export default class Server {
@@ -35,7 +40,12 @@ export default class Server {
   }
 
   private setupMiddlewares() {
-    console.log("cors, etc");
+    this._app.use(cors(corsOptions))
+    this._app.use(cookieParser())
+    this._app.use(helmet())
+    this._app.use(morgan('dev'))
+    this._app.use(express.json())
+    this._app.use(express.urlencoded({extended: true}))
   }
 
   private setupRoutes() {

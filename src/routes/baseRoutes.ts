@@ -1,6 +1,6 @@
 import { Router } from "express";
 import BaseController from "../controllers/baseController";
-import { injectable, inject } from "tsyringe";
+import { injectable, inject, container } from "tsyringe";
 
 @injectable()
 export default class BaseRoutes {
@@ -9,7 +9,9 @@ export default class BaseRoutes {
 
 
   constructor(@inject(BaseController) baseController: BaseController) {
+    this.router = Router();
     this._baseController = baseController;
+    this.registerRoute()
   }
 
   public async registerRoute() {
@@ -18,3 +20,8 @@ export default class BaseRoutes {
     });
   }
 }
+
+export const registerBaseRoutesDI = () => {
+  container.register(BaseRoutes.name, { useClass: BaseRoutes })
+}
+
